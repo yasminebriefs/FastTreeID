@@ -1,0 +1,13 @@
+Package: fasttreeid
+Type: Package
+Title: TODO
+Version: 1.0.0
+Authors@R: c(person("Yasmine", "Briefs", role = "aut"), person("Markus", "Bläser", email = "mblaeser@cs.uni-saarland.de", role = c("aut", "cre")))
+Description: TODO
+License: MIT + file LICENSE
+Encoding: UTF-8
+Imports: Rcpp
+LinkingTo: Rcpp
+SystemRequirements:
+URL: https://github.com/yasminebriefs/FastTreeID
+BugReports: https://github.com/yasminebriefs/FastTreeID/issues

@@ -1,0 +1,3 @@
+useDynLib(fasttreeid, .registration = TRUE)
+importFrom(Rcpp, sourceCpp)
+export(identify)
