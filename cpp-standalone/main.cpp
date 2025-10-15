@@ -11,6 +11,8 @@
 #include <openssl/bn.h>
 #endif
 
+namespace {
+
 enum Verbosity {
 	minimal,
 	normal
@@ -47,7 +49,7 @@ bool isProbablyPrimeOPENSSL (int64_t candidate) {
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
 	int result = BN_check_prime(bn, ctx, nullptr);
 #else
-	int result = BN_is_prime_ex(bn, 25, ctx, nullptr);
+	int result = BN_is_prime_ex(bn, 25, ctx, nullptr); /* TODO: number of checks? */
 #endif
 
 	BN_CTX_free(ctx);
@@ -65,6 +67,8 @@ bool isProbablyPrimeError ([[maybe_unused]] int64_t candidate) {
 }
 
 #endif
+
+}
 
 int main (int argc, char **argv) {
 	std::optional<uint64_t> seed;
