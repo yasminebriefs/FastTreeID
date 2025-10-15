@@ -523,10 +523,10 @@ uint64_t generateSeed () {
 }
 
 IdentificationResult identify (const std::vector<std::pair<size_t, size_t>> &bidirected,
-		const std::vector<size_t> &directed, std::optional<uint64_t> seed_opt, std::optional<int64_t> prime_opt) {
+		const std::vector<size_t> &directed, std::optional<uint64_t> seed_opt, std::optional<int64_t> prime_opt, bool (*isProbablyPrime)(int64_t)) {
 
 	uint64_t seed = seed_opt.has_value() ? seed_opt.value() : generateSeed();
-	auto randomTool = std::make_shared<RandomTool>(seed, prime_opt);
+	auto randomTool = std::make_shared<RandomTool>(seed, prime_opt, isProbablyPrime);
 	int64_t prime = randomTool->getPrime();
 
 	if (!((1ll << 58) <= prime && prime < (1ll << 59))) {

@@ -7,7 +7,7 @@ namespace fasttreeid {
 
 class RandomTool {
 public:
-	RandomTool (uint64_t, std::optional<int64_t>);
+	RandomTool (uint64_t, std::optional<int64_t>, bool (*isProbablyPrime)(int64_t));
 
 	int64_t getRandom (int64_t, int64_t);
 

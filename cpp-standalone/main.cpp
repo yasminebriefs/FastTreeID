@@ -5,10 +5,66 @@
 #include <iostream>
 #include <stdexcept>
 
+#if defined(HAVE_GMP)
+#include <gmp.h>
+#elif defined(HAVE_OPENSSL)
+#include <openssl/bn.h>
+#endif
+
 enum Verbosity {
 	minimal,
 	normal
 };
+
+#if defined(HAVE_GMP)
+
+bool isProbablyPrimeGMP (int64_t candidate) {
+	mpz_t z;
+	mpz_init(z);
+	mpz_import(z, 1, -1, sizeof(candidate), 0, 0, &candidate);
+	int result = mpz_probab_prime_p(z, 25); /* TODO: number of checks? */
+	mpz_clear(z);
+	return result > 0;
+}
+
+#elif defined(HAVE_OPENSSL)
+
+bool isProbablyPrimeOPENSSL (int64_t candidate) {
+	unsigned char bytes[8];
+	for (size_t i = 0; i < 8; i++) {
+		bytes[i] = static_cast<unsigned char>((candidate >> (8 * i)) & 0xFF);
+	}
+	BIGNUM *bn = BN_lebin2bn(bytes, 8, nullptr);
+	if (!bn) {
+		throw std::runtime_error("OpenSSL: BN_lebin2bn failed");
+	}
+	BN_CTX *ctx = BN_CTX_new();
+	if (!ctx) {
+		BN_free(bn);
+		throw std::runtime_error("OpenSSL: BN_CTX_new failed");
+	}
+
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+	int result = BN_check_prime(bn, ctx, nullptr);
+#else
+	int result = BN_is_prime_ex(bn, 25, ctx, nullptr);
+#endif
+
+	BN_CTX_free(ctx);
+	BN_free(bn);
+	if (result < 0) {
+		throw std::runtime_error("OpenSSL prime check failed with error code < 0");
+	}
+	return result > 0;
+}
+
+#else
+
+bool isProbablyPrimeError ([[maybe_unused]] int64_t candidate) {
+	throw std::logic_error("Neither HAVE_GMP nor HAVE_OPENSSL defined but no prime given");
+}
+
+#endif
 
 int main (int argc, char **argv) {
 	std::optional<uint64_t> seed;
@@ -78,7 +134,13 @@ int main (int argc, char **argv) {
 		bidirected[i] = {u, v};
 	}
 
-	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime);
+#if defined(HAVE_OPENSSL)
+	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeOPENSSL);
+#elif defined(HAVE_GMP)
+	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeGMP);
+#else
+	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeError);
+#endif
 
 	if (verbosity != minimal) {
 		std::cout << "Identification completed with seed = " << identificationResult.seed << " and prime = " << identificationResult.prime << std::endl << "Result:" << std::endl;
