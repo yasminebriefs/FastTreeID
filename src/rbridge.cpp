@@ -63,9 +63,100 @@ std::optional<uint64_t> convert_seedOrPrime (SEXP seedSEXP) {
 	return static_cast<uint64_t>(seed);
 }
 
+SEXP convert_sigma (std::shared_ptr<fasttreeid::Sigma> sigma) {
+	/* Everything should be 1-indexed in R */
+	return Rcpp::List::create(Rcpp::Named("i") = sigma->getX() + 1, Rcpp::Named("j") = sigma->getY() + 1);
+}
+
+SEXP convert_cycle (const std::vector<size_t> &nodes) {
+	/* Everything should be 1-indexed in R */
+	Rcpp::IntegerVector nodesR(nodes.size() + 1);
+	for (size_t i = 0; i < nodes.size(); i++) {
+		nodesR[i] = static_cast<int>(nodes[i]) + 1;
+	}
+	nodesR[nodes.size()] = static_cast<int>(nodes[0]) + 1;
+	return nodesR;
+}
+
+SEXP convert_path (const std::vector<size_t> &nodes) {
+	/* Everything should be 1-indexed in R */
+	Rcpp::IntegerVector nodesR(nodes.size());
+	for (size_t i = 0; i < nodes.size(); i++) {
+		nodesR[i] = static_cast<int>(nodes[i]) + 1;
+	}
+	return nodesR;
+}
+
 SEXP convert_output (fasttreeid::IdentificationResult identificationResult) {
-	return Rcpp::wrap(static_cast<int>(identificationResult.identification.size()));
-	// TODO
+	const size_t n = identificationResult.identification.size();
+	Rcpp::List identification(n);
+
+	for (size_t i = 0; i < n; i++) {
+		if (identificationResult.identification[i]) {
+			if (std::holds_alternative<fasttreeid::Fraction>(*identificationResult.identification[i])) {
+				identification[i] = Rcpp::List::create(
+						Rcpp::Named("identifiability") = 1,
+						Rcpp::Named("type") = "fraction", // TODO: make it clear that it's a fraction of sigmas somehow
+						Rcpp::Named("numerator") = convert_sigma(std::get<fasttreeid::Fraction>(*identificationResult.identification[i]).getP()),
+						Rcpp::Named("denominator") = convert_sigma(std::get<fasttreeid::Fraction>(*identificationResult.identification[i]).getQ()));
+
+			} else if (std::holds_alternative<fasttreeid::Cycle>(*identificationResult.identification[i])) {
+				std::unique_ptr<fasttreeid::Cycle> cycle = std::make_unique<fasttreeid::Cycle>(std::get<fasttreeid::Cycle>(*identificationResult.identification[i]));
+
+				if (cycle->isTwoIdentifiable()) {
+					identification[i] = Rcpp::List::create(
+							Rcpp::Named("identifiability") = 2,
+							Rcpp::Named("type") = "cycle",
+							Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()));
+				} else {
+					switch (cycle->getIdentifiability()) {
+						case fasttreeid::Cycle::oneIdentifiableAZero:
+							identification[i] = Rcpp::List::create(
+									Rcpp::Named("identifiability") = 1,
+									Rcpp::Named("type") = "cycle",
+									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
+									Rcpp::Named("reason") = "aIsZero",
+									Rcpp::Named("reasonI") = cycle->getReasonI(),
+									Rcpp::Named("reasonJ") = cycle->getReasonJ()); // TODO: make it clear that it's a lambda, maybe make this a list rather
+							break;
+						case fasttreeid::Cycle::oneIdentifiableDiscriminantZero:
+							identification[i] = Rcpp::List::create(
+									Rcpp::Named("identifiability") = 1,
+									Rcpp::Named("type") = "cycle",
+									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
+									Rcpp::Named("reason") = "discriminantIsZero");
+							break;
+						case fasttreeid::Cycle::oneIdentifiableOneOption:
+							identification[i] = Rcpp::List::create(
+									Rcpp::Named("identifiability") = 1,
+									Rcpp::Named("type") = "cycle",
+									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
+									Rcpp::Named("reason") = "onlyOneOption",
+									Rcpp::Named("reasonI") = cycle->getReasonI(),
+									Rcpp::Named("reasonJ") = cycle->getReasonJ()); // TODO: make it clear that it's a missing bidirected edge, maybe make this a list rather
+							break;
+						default:
+							break;
+					}
+				}
+
+			} else {
+				size_t identifiedBy = std::get<fasttreeid::Path>(*identificationResult.identification[i]).getBack();
+				identification[i] = Rcpp::List::create(
+						Rcpp::Named("identifiability") = (std::holds_alternative<fasttreeid::Fraction>(*identificationResult.identification[identifiedBy])
+															|| !std::get<fasttreeid::Cycle>(*identificationResult.identification[identifiedBy]).isTwoIdentifiable()) ? 1 : 2,
+						Rcpp::Named("type") = "path",
+						Rcpp::Named("nodes") = convert_path(std::get<fasttreeid::Path>(*identificationResult.identification[i]).getNodes()));
+			}
+		} else {
+			identification[i] = Rcpp::List::create(Rcpp::Named("identifiability") = 0);
+		}
+	}
+
+	return Rcpp::List::create(
+			Rcpp::_["identification"] = identification,
+			Rcpp::_["seed"] = std::to_string(identificationResult.seed),
+			Rcpp::_["prime"] = std::to_string(identificationResult.prime));
 }
 
 bool isProbablyPrime ([[maybe_unused]] int64_t candidate) {

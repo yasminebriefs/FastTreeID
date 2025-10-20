@@ -84,6 +84,14 @@ int64_t Sigma::getInTermsOfLambdaAndOmega () const noexcept {
 	return this->inTermsOfLambdaAndOmega;
 }
 
+size_t Sigma::getX () const noexcept {
+	return this->x;
+}
+
+size_t Sigma::getY () const noexcept {
+	return this->y;
+}
+
 FASTP::FASTP () noexcept {}
 
 FASTP::FASTP (int64_t p_, int64_t q_, int64_t r_, int64_t s_, int64_t t_) noexcept
@@ -225,6 +233,28 @@ bool Cycle::isTwoIdentifiable () const noexcept {
 	return this->identifiability == Cycle::twoIdentifiable;
 }
 
+std::vector<size_t> Cycle::getNodes () const {
+	return this->nodes;
+}
+
+Cycle::Identifiability Cycle::getIdentifiability () const noexcept {
+	return this->identifiability;
+}
+
+size_t Cycle::getReasonI () const {
+	if (this->identifiability != Cycle::oneIdentifiableAZero && this->identifiability != Cycle::oneIdentifiableOneOption) {
+		throw std::logic_error("getReasonI: value not set");
+	}
+	return this->reasonI;
+}
+
+size_t Cycle::getReasonJ () const {
+	if (this->identifiability != Cycle::oneIdentifiableAZero && this->identifiability != Cycle::oneIdentifiableOneOption) {
+		throw std::logic_error("getReasonJ: value not set");
+	}
+	return this->reasonJ;
+}
+
 std::ostream& operator<< (std::ostream &os, const Cycle &cycle) {
 	for (size_t v : cycle.nodes) {
 		os << v << "-";
@@ -254,6 +284,10 @@ Path::Path (const std::vector<size_t> &nodes_) : nodes(nodes_) {}
 
 size_t Path::getBack () const noexcept {
 	return this->nodes.back();
+}
+
+std::vector<size_t> Path::getNodes () const {
+	return this->nodes;
 }
 
 std::ostream& operator<< (std::ostream &os, const Path &path) {

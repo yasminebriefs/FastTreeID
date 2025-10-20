@@ -52,6 +52,9 @@ public:
 
 	int64_t getInTermsOfLambdaAndOmega () const noexcept;
 
+	size_t getX() const noexcept;
+	size_t getY() const noexcept;
+
 private:
 	size_t x, y;
 	int64_t inTermsOfLambdaAndOmega;
@@ -100,6 +103,13 @@ private:
 
 class Cycle {
 public:
+	enum Identifiability {
+		twoIdentifiable,
+		oneIdentifiableAZero,
+		oneIdentifiableDiscriminantZero,
+		oneIdentifiableOneOption
+	};
+
 	Cycle (const std::vector<size_t> &);
 
 	void setTwoIdentifiable () noexcept;
@@ -109,15 +119,14 @@ public:
 
 	bool isTwoIdentifiable () const noexcept;
 
+	std::vector<size_t> getNodes () const;
+	Identifiability getIdentifiability () const noexcept;
+	size_t getReasonI () const;
+	size_t getReasonJ () const;
+
 	friend std::ostream& operator<< (std::ostream &, const Cycle &);
 
 private:
-	enum Identifiability {
-		twoIdentifiable,
-		oneIdentifiableAZero,
-		oneIdentifiableDiscriminantZero,
-		oneIdentifiableOneOption
-	};
 
 	std::vector<size_t> nodes;
 	Identifiability identifiability;
@@ -129,6 +138,7 @@ public:
 	Path (const std::vector<size_t> &);
 
 	size_t getBack () const noexcept;
+	std::vector<size_t> getNodes () const;
 
 	friend std::ostream& operator<< (std::ostream &, const Path &);
 
