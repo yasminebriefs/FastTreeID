@@ -24,7 +24,7 @@ bool isProbablyPrimeGMP (int64_t candidate) {
 	mpz_t z;
 	mpz_init(z);
 	mpz_import(z, 1, -1, sizeof(candidate), 0, 0, &candidate);
-	int result = mpz_probab_prime_p(z, 25); /* TODO: number of checks? */
+	int result = mpz_probab_prime_p(z, 40);
 	mpz_clear(z);
 	return result > 0;
 }
@@ -49,7 +49,7 @@ bool isProbablyPrimeOPENSSL (int64_t candidate) {
 #if OPENSSL_VERSION_NUMBER >= 0x30000000L
 	int result = BN_check_prime(bn, ctx, nullptr);
 #else
-	int result = BN_is_prime_ex(bn, 25, ctx, nullptr); /* TODO: number of checks? */
+	int result = BN_is_prime_ex(bn, 40, ctx, nullptr);
 #endif
 
 	BN_CTX_free(ctx);
