@@ -1,0 +1,8 @@
+^/.git$
+^/.gitignore
+
+^cpp-standalone($|/)
+
+^src/.*/.(o|so)$
+
+^builds($|/)
