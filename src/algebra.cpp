@@ -8,10 +8,13 @@ std::ostream& operator<< (std::ostream &os, const Variable &var) {
 
 int64_t multiply (int64_t a, int64_t b, int64_t prime) noexcept {
 #if defined(__SIZEOF_INT128__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 
 	__int128 A = a, B = b;
 	return (int64_t)(A * B % prime);
 
+#pragma GCC diagnostic pop
 #else
 
 	auto multiplyReduce = [](int64_t left, int64_t right, int64_t prime) {
