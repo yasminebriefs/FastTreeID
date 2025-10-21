@@ -65,7 +65,7 @@ std::optional<uint64_t> convert_seedOrPrime (SEXP seedSEXP) {
 
 SEXP convert_sigma (std::shared_ptr<fasttreeid::Sigma> sigma) {
 	/* Everything should be 1-indexed in R */
-	return Rcpp::List::create(Rcpp::Named("i") = sigma->getX() + 1, Rcpp::Named("j") = sigma->getY() + 1);
+	return Rcpp::List::create(Rcpp::Named("what") = "sigma", Rcpp::Named("i") = sigma->getX() + 1, Rcpp::Named("j") = sigma->getY() + 1);
 }
 
 SEXP convert_cycle (const std::vector<size_t> &nodes) {
@@ -96,7 +96,7 @@ SEXP convert_output (fasttreeid::IdentificationResult identificationResult) {
 			if (std::holds_alternative<fasttreeid::Fraction>(*identificationResult.identification[i])) {
 				identification[i] = Rcpp::List::create(
 						Rcpp::Named("identifiability") = 1,
-						Rcpp::Named("type") = "fraction", // TODO: make it clear that it's a fraction of sigmas somehow
+						Rcpp::Named("type") = "fraction",
 						Rcpp::Named("numerator") = convert_sigma(std::get<fasttreeid::Fraction>(*identificationResult.identification[i]).getP()),
 						Rcpp::Named("denominator") = convert_sigma(std::get<fasttreeid::Fraction>(*identificationResult.identification[i]).getQ()));
 
@@ -115,25 +115,23 @@ SEXP convert_output (fasttreeid::IdentificationResult identificationResult) {
 									Rcpp::Named("identifiability") = 1,
 									Rcpp::Named("type") = "cycle",
 									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
-									Rcpp::Named("reason") = "aIsZero",
-									Rcpp::Named("reasonI") = cycle->getReasonI(),
-									Rcpp::Named("reasonJ") = cycle->getReasonJ()); // TODO: make it clear that it's a lambda, maybe make this a list rather
+									Rcpp::Named("reason") = "a_is_zero",
+									Rcpp::Named("reason_edge") = Rcpp::List::create(Rcpp::Named("what") = "lambda", Rcpp::Named("i") = cycle->getReasonI() + 1, Rcpp::Named("j") = cycle->getReasonJ() + 1));
 							break;
 						case fasttreeid::Cycle::oneIdentifiableDiscriminantZero:
 							identification[i] = Rcpp::List::create(
 									Rcpp::Named("identifiability") = 1,
 									Rcpp::Named("type") = "cycle",
 									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
-									Rcpp::Named("reason") = "discriminantIsZero");
+									Rcpp::Named("reason") = "discriminant_is_zero");
 							break;
 						case fasttreeid::Cycle::oneIdentifiableOneOption:
 							identification[i] = Rcpp::List::create(
 									Rcpp::Named("identifiability") = 1,
 									Rcpp::Named("type") = "cycle",
 									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
-									Rcpp::Named("reason") = "onlyOneOption",
-									Rcpp::Named("reasonI") = cycle->getReasonI(),
-									Rcpp::Named("reasonJ") = cycle->getReasonJ()); // TODO: make it clear that it's a missing bidirected edge, maybe make this a list rather
+									Rcpp::Named("reason") = "only_one_option",
+									Rcpp::Named("reason_edge") = Rcpp::List::create(Rcpp::Named("what") = "missing", Rcpp::Named("i") = cycle->getReasonI() + 1, Rcpp::Named("j") = cycle->getReasonJ() + 1));
 							break;
 						default:
 							break;
