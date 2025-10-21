@@ -7,6 +7,9 @@ namespace {
 
 std::vector<std::pair<size_t, size_t>> convert_bidirected (SEXP bidirectedSEXP, size_t n) {
 	Rcpp::IntegerMatrix bidirectedMat(bidirectedSEXP);
+	if (bidirectedMat.ncol() != 2) {
+		throw std::invalid_argument("bidirected should be a matrix with two columns");
+	}
 	std::vector<std::pair<size_t, size_t>> bidirected;
 	bidirected.reserve(bidirectedMat.nrow());
 	for (int i = 0; i < bidirectedMat.nrow(); i++) {
@@ -78,11 +81,12 @@ SEXP convert_cycle (const std::vector<size_t> &nodes) {
 	return nodesR;
 }
 
-SEXP convert_path (const std::vector<size_t> &nodes) {
+SEXP convert_path (const std::vector<size_t> &nodes, size_t node) {
 	/* Everything should be 1-indexed in R */
-	Rcpp::IntegerVector nodesR(nodes.size());
+	Rcpp::IntegerVector nodesR(nodes.size() + 1);
+	nodesR[0] = node + 1;
 	for (size_t i = 0; i < nodes.size(); i++) {
-		nodesR[i] = static_cast<int>(nodes[i]) + 1;
+		nodesR[i + 1] = static_cast<int>(nodes[i]) + 1;
 	}
 	return nodesR;
 }
@@ -144,7 +148,7 @@ SEXP convert_output (fasttreeid::IdentificationResult identificationResult) {
 						Rcpp::Named("identifiability") = (std::holds_alternative<fasttreeid::Fraction>(*identificationResult.identification[identifiedBy])
 															|| !std::get<fasttreeid::Cycle>(*identificationResult.identification[identifiedBy]).isTwoIdentifiable()) ? 1 : 2,
 						Rcpp::Named("type") = "path",
-						Rcpp::Named("nodes") = convert_path(std::get<fasttreeid::Path>(*identificationResult.identification[i]).getNodes()));
+						Rcpp::Named("nodes") = convert_path(std::get<fasttreeid::Path>(*identificationResult.identification[i]).getNodes(), i));
 			}
 		} else {
 			identification[i] = Rcpp::List::create(Rcpp::Named("identifiability") = 0);
