@@ -5,13 +5,13 @@
 \arguments{
 	\item{bidirected}{A 2-column matrix in which each row specifies a bidirected edge (1-indexed)}
 	\item{directed}{The directed parents p_i of nodes i from 2 to n (1 <= p_i < i)}
-	\item{seed}{The seed to use as a decimal string. Picks a random seed by default. Must fit into a 64-bit integer}
+	\item{seed}{The seed to use as a decimal string. Picks a random seed by default. Must fit into an unsigned 64-bit integer}
 	\item{prime}{The prime to use as a decimal string. Picks a random prime by default. If no prime is given, the package gmp must be installed. The prime must be between 2^58 and 2^59}
 }
 \value{
 	Returns a nested named list describing the identification result:
 	\describe{
-		\item{identification}{A list with n entries for all nodes i from 1 to n. For each node, it contains a list describing the result for node. For all nodes, this list contains an entry \code{identifiability} that can take the values 0 (unidentifiable), 1 (1-identifiable) and 2 (2-identifiable). For all nodes that are not unidentifiable, this list contains an entry \code{type} that can take the following values:
+		\item{identification}{A list with n entries for all nodes i from 1 to n. For each node, it contains a list describing the result for the node. For all nodes, this list contains an entry \code{identifiability} that can take the values 0 (unidentifiable), 1 (1-identifiable) and 2 (2-identifiable). For all nodes that are not unidentifiable, this list contains an entry \code{type} that can take the following values:
 		\describe{
 			\item{path}{This means that this node can be identified by missing bidirected edges of rank 2 to a node identified by a fraction or a cycle (Lemma 4 in the paper by Gupta and Bläser). In this case, the list additionally contains an entry \code{nodes} that describes the path to this node. The first node in the list is the current node and the type of the last node in the list is fraction or cycle}
 			\item{fraction}{This means that this node can be identified by a missing bidirected edge to the root (Section 2.1 in the paper by Gupta and Bläser). In this case, the list additionally contains two entries \code{numerator} and \code{denominator}, each of the format \code{{"what": "sigma", "i": i, "j": j}}}
