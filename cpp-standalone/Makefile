@@ -6,13 +6,13 @@ GMP := -lgmp -DHAVE_GMP
 default: with-openssl
 
 with-openssl:
-	g++ -std=c++20 -O2 $(FILES) $(OPENSSL) -o FastTreeID
+	g++ -std=c++17 -O2 $(FILES) $(OPENSSL) -o FastTreeID
 
 with-gmp:
-	g++ -std=c++20 -O2 $(FILES) $(GMP) -o FastTreeID
+	g++ -std=c++17 -O2 $(FILES) $(GMP) -o FastTreeID
 
 no-prime-check:
-	g++ -std=c++20 -O2 $(FILES) -o FastTreeID
+	g++ -std=c++17 -O2 $(FILES) -o FastTreeID
 
 
 clean:
