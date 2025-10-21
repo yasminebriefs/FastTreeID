@@ -8,3 +8,5 @@
 ^builds($|/)
 
 ^LICENSE.md
+
+^README.md
