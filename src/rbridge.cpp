@@ -135,7 +135,7 @@ SEXP convert_output (fasttreeid::IdentificationResult identificationResult) {
 									Rcpp::Named("type") = "cycle",
 									Rcpp::Named("nodes") = convert_cycle(cycle->getNodes()),
 									Rcpp::Named("reason") = "only_one_option",
-									Rcpp::Named("reason_edge") = Rcpp::List::create(Rcpp::Named("what") = "missing", Rcpp::Named("i") = cycle->getReasonI() + 1, Rcpp::Named("j") = cycle->getReasonJ() + 1));
+									Rcpp::Named("reason_edge") = Rcpp::List::create(Rcpp::Named("what") = "missing_bidirected", Rcpp::Named("i") = cycle->getReasonI() + 1, Rcpp::Named("j") = cycle->getReasonJ() + 1));
 							break;
 						default:
 							break;
