@@ -76,13 +76,16 @@ Result:
 ```
 
 ## General notes
-The algorithm is randomized. The error probability is below $4.1e-6$ for $n = 200$ and below $0.0026$ for $n = 1000$ (the estimated running time for $n = 1000$ is more than two hours). If the prime is not given, using the same seed twice will generate the same prime twice. Whether or not a prime is given doesn't influence the other random computations.
+The algorithm is randomized. The error probability is below $4.1e-6$ for $n = 200$ and below $0.0026$ for $n = 1000$ (the estimated running time for $n = 1000$ is more than two hours). These estimates are very conservative worst-case estimates, and the algorithm can be run multiple times with different seeds (and primes) to decrease the error probability exponentially.
+
+If no seed is given, a seed is generated randomly. If the prime is not given, using the same seed twice will generate the same prime twice. Whether or not a prime is given doesn't influence the other random computations.
 
 Note that the input is 1-indexed in R and 0-indexed in C++.
 
 ## References
-Yasmine Briefs and Markus Bläser. Faster generic identification in tree-shaped structural causal models (2025)
+Yasmine Briefs and Markus Bläser. Faster generic identification in tree-shaped structural causal models. Advances in Neural Information Processing Systems 29: Annual Conference on Neural Information Processing Systems 2025, NeurIPS 2025, December 2-7, 2025, San Diego, USA
 
-Aaryan Gupta and Markus Bläser. Identification for tree-shaped structural causal models in polynomial time (2024)
+Aaryan Gupta and Markus Bläser. Identification for tree-shaped structural causal models in polynomial time. Thirty-Eight AAAI Conference on Artificial Intelligence, AAAI 2024, Thirty-Sixth Conference on Innovative Applications of Artificial Intelligence, IAAI 2024, Fourteenth Symposium on Educational Advances in Artificial Intelligence, EAAI 2014, February 20-27, 2024, Vancouver, Canada
 
-Benito van der Zander et al. Identification in tree-shaped linear structural causal models (2022)
+Benito van der Zander, Marcel Wienöbst, Markus Bläser, and Maciej Liskiewicz. Identification in tree-shaped linear structural causal models. International Conference on Artificial Intelligence and Statistics, AISTATS 2022, March 28-30, 2022, Virtual Event
+
