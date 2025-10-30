@@ -2,3 +2,5 @@ FastTreeID
 *.o
 *.so
 builds/
+fasttreeid.Rcheck
+fasttreeid_1.0.0.tar.gz
