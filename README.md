@@ -78,7 +78,7 @@ Result:
 ## General notes
 The algorithm is randomized. The error probability is below $4.1e-6$ for $n = 200$ and below $0.0026$ for $n = 1000$ (the estimated running time for $n = 1000$ is more than two hours). These estimates are very conservative worst-case estimates, and the algorithm can be run multiple times with different seeds (and primes) to decrease the error probability exponentially.
 
-If no seed is given, a seed is generated randomly. If the prime is not given, using the same seed twice will generate the same prime twice. Whether or not a prime is given doesn't influence the other random computations.
+If no seed is given, a seed is generated randomly. If the prime is not given, using the same seed (on the same system) twice will generate the same prime twice. Whether or not a prime is given doesn't influence the other random computations.
 
 Note that the input is 1-indexed in R and 0-indexed in C++.
 
