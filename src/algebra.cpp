@@ -9,7 +9,7 @@ std::ostream& operator<< (std::ostream &os, const Variable &var) {
 int64_t multiply (int64_t a, int64_t b, int64_t prime) noexcept {
 #if defined(__SIZEOF_INT128__)
 
-	__int128 A = a, B = b;
+	__extension__ __int128 A = a, B = b;
 	return (int64_t)(A * B % prime);
 
 #else
