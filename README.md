@@ -3,7 +3,7 @@ This is an implementation of the algorithm from the paper 'Faster Generic Identi
 
 It determines, for a structural causal model (SCM) whose directed edges form a tree, whether each parameter is unidentifiable, 1-identifiable or 2-identifiable (other cases cannot occur), using a randomized algorithm with provable running time $O(n^3 log^2 n)$.
 
-This repository contains both an R package (fasttreeid) and a C++ version (in cpp-standalone/). The C++ source files shared by the R package and the C++ implementation are in src/.
+This repository contains both an R package (fasttreeid) and a C++ version (in cpp-standalone/). The C++ source files shared by the R package and the C++ implementation are in src/. The package is published as fasttreeid on [CRAN](https://cran.r-project.org/package=fasttreeid).
 
 ## The R package fasttreeid
 **Usage**: `fasttreeid_identify(bidirected, directed, seed = NULL, prime = NULL)`
@@ -83,9 +83,9 @@ If no seed is given, a seed is generated randomly. If the prime is not given, us
 Note that the input is 1-indexed in R and 0-indexed in C++.
 
 ## References
-Yasmine Briefs and Markus Bläser. Faster generic identification in tree-shaped structural causal models. Advances in Neural Information Processing Systems 29: Annual Conference on Neural Information Processing Systems 2025, NeurIPS 2025, December 2-7, 2025, San Diego, USA
+Yasmine Briefs and Markus Bläser. Faster generic identification in tree-shaped structural causal models. Advances in Neural Information Processing Systems 29: Annual Conference on Neural Information Processing Systems 2025, NeurIPS 2025, December 2-7, 2025, San Diego, USA [https://openreview.net/forum?id=8PHOPPH35D](https://openreview.net/forum?id=8PHOPPH35D)
 
-Aaryan Gupta and Markus Bläser. Identification for tree-shaped structural causal models in polynomial time. Thirty-Eight AAAI Conference on Artificial Intelligence, AAAI 2024, Thirty-Sixth Conference on Innovative Applications of Artificial Intelligence, IAAI 2024, Fourteenth Symposium on Educational Advances in Artificial Intelligence, EAAI 2014, February 20-27, 2024, Vancouver, Canada
+Aaryan Gupta and Markus Bläser. Identification for tree-shaped structural causal models in polynomial time. Thirty-Eight AAAI Conference on Artificial Intelligence, AAAI 2024, Thirty-Sixth Conference on Innovative Applications of Artificial Intelligence, IAAI 2024, Fourteenth Symposium on Educational Advances in Artificial Intelligence, EAAI 2014, February 20-27, 2024, Vancouver, Canada [https://doi.org/10.1609%2Faaai.v38i18.30023](https://doi.org/10.1609%2Faaai.v38i18.30023)
 
-Benito van der Zander, Marcel Wienöbst, Markus Bläser, and Maciej Liskiewicz. Identification in tree-shaped linear structural causal models. International Conference on Artificial Intelligence and Statistics, AISTATS 2022, March 28-30, 2022, Virtual Event
+Benito van der Zander, Marcel Wienöbst, Markus Bläser, and Maciej Liskiewicz. Identification in tree-shaped linear structural causal models. International Conference on Artificial Intelligence and Statistics, AISTATS 2022, March 28-30, 2022, Virtual Event [https://proceedings.mlr.press/v151/van-der-zander22a.html](https://proceedings.mlr.press/v151/van-der-zander22a.html)
 
