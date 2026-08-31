@@ -12,6 +12,7 @@ int64_t multiply (int64_t, int64_t, int64_t) noexcept;
 
 class Variable {
 public:
+	virtual ~Variable() = default;
 	friend std::ostream& operator<< (std::ostream &, const Variable &);
 
 private:

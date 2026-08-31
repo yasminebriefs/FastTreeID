@@ -11,7 +11,7 @@ uint64_t deriveGeneralSeed (uint64_t seed) {
 
 uint64_t derivePrimeSeed (uint64_t seed) {
 	std::mt19937_64 gen(seed);
-	gen();
+	gen.discard(1);
 	return gen();
 }
 
