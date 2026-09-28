@@ -46,14 +46,14 @@ The executable is called `FastTreeID`. It reads the input from stdin and writes 
 $n$  
 $p_1$ $\dots$ $p_{n-1}$  
 $m$  
-$u_0~v_0$  
+$u_0$ $v_0$  
 $\dots$  
 $u_{m-1}$ $v_{m-1}$  
 
-where $n$ is the number of nodes; $m$ is the number of edges;
-the nodes are numbered $0, …, n-1$;
-$p_1, …, p_{n-1}$ are the directed parents of $1, …, n-1$;
-and ${u_0, v_0}, …, {u_{m-1},v_{m-1}}$ are the bidirected edges
+where $n$ is the number of nodes, $m$ is the number of edges,
+the nodes are numbered $0,\dots, n-1$;
+$p_1,\dots, p_{n-1}$ are the directed parents of $1,\dots, n-1$,
+and $`\{u_0, v_0\}, \dots, \{u_{m-1},v_{m-1}\}`$ are the bidirected edges
 
 **Options**
 ```
