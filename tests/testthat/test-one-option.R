@@ -24,7 +24,7 @@ test_that ("identification by cycle with only one option works", {
 	expect_equal(result$identification[[2]]$reason, "only_one_option")
 	expect_equal(result$identification[[2]]$reason_edge$what, "missing_bidirected")
 	expect_equal(result$identification[[2]]$reason_edge$i, 3)
-	expect_equal(result$identification[[2]]$reason_edge$j, 4)
+	expect_equal(result$identification[[2]]$reason_edge$j, 10)
 
 	expect_equal(result$identification[[3]]$type, "path")
 	expect_equal(result$identification[[3]]$nodes, c(3, 2))

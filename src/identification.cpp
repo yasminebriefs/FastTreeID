@@ -341,6 +341,11 @@ void findIdentifyingCycle (size_t n, int64_t prime,
 			if (result[i][i][0][1] != 0 || result[i][i][0][0] != result[i][i][1][1]) {
 				/* No need to transpose here, doesn't change whether it's a multiple of Id */
 				auto cycle = selfReducibility(i, component.size(), t, prime, initial);
+				/* Use the extracted cycle, including its closing edge, for the coefficients. */
+				std::vector<std::vector<int64_t>> product = {{1, 0}, {0, 1}};
+				for (size_t k = 0; k < cycle.size(); k++) {
+					product = matrixMultiply(product, initial[cycle[k]][cycle[(k + 1) % cycle.size()]], prime);
+				}
 				for (size_t &v : cycle) {
 					v = component[v];
 				}
@@ -350,8 +355,7 @@ void findIdentifyingCycle (size_t n, int64_t prime,
 					bfsPropagate(v, n, graph, identification);
 				}
 
-				int64_t a = result[i][i][0][1], b = result[i][i][0][0], c = result[i][i][1][1],
-					d = result[i][i][1][0];
+				int64_t a = product[0][1], b = product[0][0], c = product[1][1], d = product[1][0];
 				/* Lemma 8, a and d swapped because of transposition */
 
 				if (a == 0) { /* Case 2 in lemma 8, a = 0 */
@@ -425,6 +429,11 @@ void findIdentifyingCycleFaster (size_t n, int64_t prime,
 		throw std::logic_error("findIdentifyingCycleFaster: No solution. Please report this error.");
 	}
 	auto cycle = selfReducibility(which, component.size(), low, prime, initial);
+	/* Use the extracted cycle, including its closing edge, for the coefficients. */
+	std::vector<std::vector<int64_t>> product = {{1, 0}, {0, 1}};
+	for (size_t k = 0; k < cycle.size(); k++) {
+		product = matrixMultiply(product, initial[cycle[k]][cycle[(k + 1) % cycle.size()]], prime);
+	}
 	for (size_t &v : cycle) {
 		v = component[v];
 	}
@@ -434,8 +443,7 @@ void findIdentifyingCycleFaster (size_t n, int64_t prime,
 		bfsPropagate(v, n, graph, identification);
 	}
 
-	int64_t a = result[which][which][0][1], b = result[which][which][0][0], c = result[which][which][1][1],
-	d = result[which][which][1][0];
+	int64_t a = product[0][1], b = product[0][0], c = product[1][1], d = product[1][0];
 	/* Lemma 8, a and d swapped because of transposition */
 
 	if (a == 0) { /* Case 2 in lemma 8, a = 0 */
