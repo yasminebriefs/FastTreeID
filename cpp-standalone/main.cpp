@@ -138,10 +138,10 @@ int main (int argc, char **argv) {
 		bidirected[i] = {u, v};
 	}
 
-#if defined(HAVE_OPENSSL)
-	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeOPENSSL);
-#elif defined(HAVE_GMP)
+#if defined(HAVE_GMP)
 	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeGMP);
+#elif defined(HAVE_OPENSSL)
+	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeOPENSSL);
 #else
 	auto identificationResult = fasttreeid::identify(bidirected, directed, seed, prime, isProbablyPrimeError);
 #endif
