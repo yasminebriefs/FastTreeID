@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <optional>
 #include <random>
+#include <stddef.h>
 
 namespace fasttreeid {
 

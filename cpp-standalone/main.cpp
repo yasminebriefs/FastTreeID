@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 #if defined(HAVE_GMP)
 #include <gmp.h>
@@ -73,7 +74,7 @@ bool isProbablyPrimeError ([[maybe_unused]] int64_t candidate) {
 int main (int argc, char **argv) {
 	std::optional<uint64_t> seed;
 	std::optional<int64_t> prime;
-	Verbosity verbosity = normal; 
+	Verbosity verbosity = normal;
 
 	for (int i = 1; i < argc; i++) {
 		if (std::strcmp(argv[i], "--seed") == 0) {
@@ -106,6 +107,7 @@ int main (int argc, char **argv) {
 					  << "   --seed SEED        Seed the random with SEED. Generates a random seed by default." << std::endl
 					  << "   --prime PRIME      Use PRIME as the prime. PRIME should be between 2^58 and 2^59." << std::endl
 					  << "                      Selects a random prime in this range by default." << std::endl
+					  << "                      Primality of supplied values is not checked." << std::endl
 					  << "   --minimal          Only output n-1 integers i_1 … i_{n-1}, i_j∈{0,1,2}" << std::endl
 					  << "                      0 means unidentifiable, 1 means 1-identifiable, 2 means 2-identifiable" << std::endl
 					  << "   --help             Display this help and exit" << std::endl;

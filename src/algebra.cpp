@@ -1,5 +1,8 @@
 #include "algebra.h"
 
+#include <utility>
+#include <stddef.h>
+
 namespace fasttreeid {
 
 std::ostream& operator<< (std::ostream &os, const Variable &var) {

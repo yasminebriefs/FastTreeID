@@ -4,8 +4,10 @@
 #include "random.h"
 
 #include <optional>
+#include <utility>
 #include <variant>
 #include <vector>
+#include <stddef.h>
 
 namespace fasttreeid {
 
